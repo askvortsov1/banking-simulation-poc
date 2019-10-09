@@ -1,0 +1,7 @@
+__pycache__
+
+.vscode
+.pytest_cache
+
+api/src/migrations
+api/src/app.db

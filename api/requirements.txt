@@ -1,0 +1,18 @@
+# Framework
+flask
+
+# ORM and DB
+sqlalchemy
+flask-sqlalchemy
+flask-fixtures
+flask-migrate
+
+# REST Framework
+flask-restful
+
+# Packages for in-container remote development
+flake8
+autopep8
+pydocstyle
+pytest
+requests
