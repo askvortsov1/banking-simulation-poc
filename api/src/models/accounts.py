@@ -23,6 +23,12 @@ class AccountConfig(db.Model):
 
     accounts = db.relationship('Account', backref='config', lazy=True)
 
+    JSON_ATTRIBUTES = ("name", "account_type", "min_opening_balance", "interest", "deposit_fee", "withdrawal_fee", "allow_overdraft", "overdraft_limit", "overdraft_fee")
+    
+    @property
+    def account_type(self):
+        return "checking" if self.is_checking else "savings"
+
     def check_account_type_valid(self):
         if self.is_checking and self.is_savings:
             raise ValueError("Account can't be both savings and checkings.")
@@ -44,6 +50,8 @@ class Account(db.Model):
     _balance = db.Column(db.Float, nullable=False, default=0)
 
     _closed = db.Column(db.Boolean, nullable=False, default=False)
+
+    JSON_ATTRIBUTES = ("user", "bank", "config", "balance")
 
     @property
     def balance(self):

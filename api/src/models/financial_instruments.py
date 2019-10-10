@@ -4,11 +4,6 @@ from werkzeug.exceptions import Forbidden
 from app import db
 
 
-# TODO
-class Loan(db.Model):
-    pass
-
-
 class Check(db.Model):
     issuing_account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
     payable_to = db.Column(db.String(256), nullable=False)
@@ -18,6 +13,16 @@ class Check(db.Model):
 
     _deposited = db.Column(db.Boolean, nullable=False, default=False)
     _void = db.Column(db.Boolean, nullable=False, default=True)
+
+    JSON_ATTRIBUTES = ("issuing_account", "payable_to", "amount", "is_void", "is_deposited")
+
+    @property
+    def is_deposited(self):
+        return self._deposited
+
+    @property
+    def is_void(self):
+        return self._void
 
     def validate(self, depositing_account):
         valid_depositing_account = self.payable_to == depositing_account or any(
@@ -45,6 +50,8 @@ class Transaction(db.Model):
     _check_amount = db.Column(db.Float, nullable=False, default=0)
 
     datetime = db.Column(db.DateTime, nullable=False, default=datetime.now)
+
+    JSON_ATTRIBUTES = ("account", "total_amount", "datetime", "description")
 
     @property
     def total_amount(self):

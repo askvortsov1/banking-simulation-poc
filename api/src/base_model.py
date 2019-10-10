@@ -6,6 +6,8 @@ from sqlalchemy.ext.declarative import declared_attr
 class IdModel(Model):
     """Abstract model that serves as base for all models used.
     """
+    JSON_ATTRIBUTES = ()
+
     @declared_attr
     def id(cls):
         """Provides id column for all inheriting models.
@@ -20,4 +22,12 @@ class IdModel(Model):
     def json(self):
         """JSON-encodes object
         """
-        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
+        json_dict = {}
+        for attr in ["id"] + list(self.JSON_ATTRIBUTES):
+            raw_val = getattr(self, attr)
+            if raw_val is None:
+                continue
+            val = raw_val() if callable(raw_val) else raw_val
+            json_dict[attr] = val
+        return json_dict
+            

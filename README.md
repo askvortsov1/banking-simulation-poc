@@ -1,6 +1,6 @@
 # banking-simulation-poc
 
-CMPSC 132 to explore OOP principles via a simulated banking environment in the United States.
+CMPSC 132 Assignment to explore OOP principles via a simulated banking environment in the United States.
 
 Implemented as Flask-powered Restful API.
 
@@ -28,7 +28,7 @@ I used this project to explore RESTful APIs with Flask. However, it is still a g
 
 - [ ] Record Ids should not be sequential
 
-- [ ] Getting record information should return a whitelisted sbset of attribute and property values
+- [x] ~~Getting record information should return a whitelisted subset of attribute and property values~~
 
 - [ ] Lookup options by name should be implemented
 

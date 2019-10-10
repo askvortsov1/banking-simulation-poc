@@ -15,6 +15,8 @@ class Bank(db.Model):
     account_configs = db.relationship('AccountConfig', backref='bank', lazy=True)
     accounts = db.relationship('Account', backref='bank', lazy=True)
 
+    JSON_ATTRIBUTES = ("name",)
+
     def __repr__(self):
         return self.name
 
@@ -25,6 +27,8 @@ class BankBranch(db.Model):
 
     staff = db.relationship('Staff', backref='branch', lazy=True)
 
+    JSON_ATTRIBUTES = ("name", "bank")
+
     def __repr__(self):
         return "{} - {} Branch".format(self.bank, self.name)
 
@@ -34,6 +38,8 @@ class Staff(db.Model):
     branch_id = db.Column(db.Integer, db.ForeignKey('bank_branch.id'), nullable=False)
 
     role = db.Column(db.Integer, nullable=False)
+
+    JSON_ATTRIBUTES = ("user", "branch", "role_display")
 
     @property
     def role_display(self):
