@@ -2,10 +2,10 @@ version: '3.4'
 services:
   web:
     container_name: "banking"
-    build: "api"
+    build: "."
     env_file: ".env"
     ports:
       - "5000:5000"
     volumes:
-      - ./api/src:/code
+      - ./src:/code
     command: "sh /entrypoint.sh"

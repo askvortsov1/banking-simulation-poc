@@ -4,7 +4,6 @@ flask
 # ORM and DB
 sqlalchemy
 flask-sqlalchemy
-flask-fixtures
 flask-migrate
 
 # REST Framework

@@ -24,7 +24,7 @@ class AccountConfig(db.Model):
     accounts = db.relationship('Account', backref='config', lazy=True)
 
     JSON_ATTRIBUTES = ("name", "account_type", "min_opening_balance", "interest", "deposit_fee", "withdrawal_fee", "allow_overdraft", "overdraft_limit", "overdraft_fee")
-    
+
     @property
     def account_type(self):
         return "checking" if self.is_checking else "savings"
@@ -41,6 +41,7 @@ class Account(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     bank_id = db.Column(db.Integer, db.ForeignKey('bank.id'), nullable=False)
+
     config_id = db.Column(db.Integer, db.ForeignKey('account_config.id'), nullable=False)
 
     checks_issued = db.relationship('Check', backref='issuing_account', lazy=True)

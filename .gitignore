@@ -2,6 +2,5 @@ __pycache__
 
 .vscode
 .pytest_cache
+*.db
 
-api/src/migrations
-api/src/app.db
