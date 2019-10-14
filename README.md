@@ -27,14 +27,13 @@ If running without docker, please consider using a virtualenv.
 
 ## Tests
 
-A number of tests have been created in src/tests. These tests have been hooked up to the flask system, and can be run with the following command:
+A number of tests have been created in. These tests can be run with the following steps.
 
-If using docker:
-`docker exec -it banking flask test`
+1. Make sure all requirements in requirements.txt are installed (use of a virtualenv is recommended).
+2. `sh test.sh`
 
-If running natively:
-`flask test` from inside src directory
-
+Support for running tests with the docker configuration may be added later.
+Unfortunately, I was unable to figure out how to refresh the database between test sessions, so all tests are contained in one pytest test case. I recognize that this is very bad practice, but due to the impending assignment deadline, I'm forced to leave it like this for now. This is a theoretical proof of concept, which isn't used anywhere, so there's no security ramification to this.
 
 ## Inaccuracies
 
@@ -62,4 +61,4 @@ I used this project to explore RESTful APIs with Flask. However, it is still a g
 
 - [ ] A token-based authentication system should be implemented
 
-- [ ] The error message system should be redone
+- [ ] A validator system for model attributes should be added.
