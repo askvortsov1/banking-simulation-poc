@@ -21,7 +21,6 @@ def setup_db(app):
 
 
 def configure_cli(app, db):
-    import pytest
     from models import User
 
     @app.cli.command("create-superuser")
@@ -32,14 +31,10 @@ def configure_cli(app, db):
         db.session.add(user)
         db.session.commit()
 
-    @app.cli.command("test")
-    def test():
-        pytest.main(["-x", "tests", "-vv", "-W" "ignore::DeprecationWarning"])
-
 
 def configure_api(app):
     from api_routes import routes
-    api = Api(app, prefix=config.BASE_PATH, catch_all_404s=True, errors=config.ERRORS)
+    api = Api(app, prefix=config.BASE_PATH, catch_all_404s=True)
 
     for route in routes:
         api.add_resource(route[0], route[1])
