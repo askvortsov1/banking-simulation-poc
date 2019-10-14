@@ -1,6 +1,6 @@
 import os
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), 'app.db')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), os.environ.get("FLASK_DB_FILE", 'app.db'))
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # =====Banking Settings======
@@ -33,11 +33,3 @@ CREDIT_SCORE_INTEREST_RATE_MAPPING = {
 
 # API Settings
 BASE_PATH = "/api/v1"
-
-ERRORS = {
-    'IntegrityError': {
-        'message': "A resource with that ID no longer exists.",
-        'status': 410,
-        'extra': "Any extra information you want.",
-    }
-}
