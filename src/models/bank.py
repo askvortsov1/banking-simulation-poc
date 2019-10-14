@@ -3,10 +3,7 @@ from app import db
 
 
 class Bank(db.Model):
-    """The Bank model represents banks in the database.
-
-    Arguments:
-        name {str} -- [description]
+    """Database model representing bank
     """
     name = db.Column(db.String(128), nullable=False, unique=True)
 
@@ -18,10 +15,17 @@ class Bank(db.Model):
     JSON_ATTRIBUTES = ("name",)
 
     def __repr__(self):
+        """Verbose representation of bank instance
+
+        Returns:
+            str -- Verbose representation of bank instance
+        """
         return self.name
 
 
 class BankBranch(db.Model):
+    """Database model representing bank branch
+    """
     name = db.Column(db.String(128), nullable=False)
     bank_id = db.Column(db.Integer, db.ForeignKey('bank.id'), nullable=False)
 
@@ -30,10 +34,17 @@ class BankBranch(db.Model):
     JSON_ATTRIBUTES = ("name", "bank")
 
     def __repr__(self):
+        """Verbose representation of bank branch instance
+
+        Returns:
+            str -- Verbose representation of bank branch instance
+        """
         return "{} - {} Branch".format(self.bank, self.name)
 
 
 class Staff(db.Model):
+    """Database representation of bank staff
+    """
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     branch_id = db.Column(db.Integer, db.ForeignKey('bank_branch.id'), nullable=False)
 
@@ -43,6 +54,8 @@ class Staff(db.Model):
 
     @property
     def role_display(self):
+        """Converts ordinal role into verbose representation
+        """
         role_mapping = {
             config.MANAGER: "Manager",
             config.ASSISTANT_MANAGER: "Assistant Manager",
@@ -51,4 +64,9 @@ class Staff(db.Model):
         return role_mapping[self.role]
 
     def __repr__(self):
+        """Verbose representation of staff instance
+
+        Returns:
+            str -- Verbose representation of staff instance
+        """
         return "{}: {} {}".format(self.branch.bank, self.role_display, self.user)

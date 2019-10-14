@@ -4,6 +4,8 @@ from app import db
 
 
 class AccountConfig(db.Model):
+    """Database model representing account configuration entry.
+    """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
     is_savings = db.Column(db.Boolean, nullable=False)
@@ -27,17 +29,31 @@ class AccountConfig(db.Model):
 
     @property
     def account_type(self):
+        """Returns verbose account type
+
+        Returns:
+            str -- Verbose account type
+        """
         return "checking" if self.is_checking else "savings"
 
     def check_account_type_valid(self):
-        if self.is_checking and self.is_savings:
+        """Validates that account isn't savings and checkings at the same time.
+        """
+        if self.is_checking and self.is_savings or self.is_checking == self.is_savings:
             raise ValueError("Account can't be both savings and checkings.")
 
     def __repr__(self):
+        """String representation of account config
+
+        Returns:
+            str -- verbose representation of account config instance
+        """
         return self.name
 
 
 class Account(db.Model):
+    """Database model representing account.
+    """
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     bank_id = db.Column(db.Integer, db.ForeignKey('bank.id'), nullable=False)
@@ -56,34 +72,66 @@ class Account(db.Model):
 
     @property
     def balance(self):
+        """Encapsulates balance
+
+        Returns:
+            float -- Account instance balance
+        """
         return self._balance
 
     @property
     def closed(self):
+        """Encapsulates closed
+
+        Returns:
+            bool -- Whether the account instance is closed.
+        """
         return self._closed
 
     @property
     def withdrawals_last_month(self):
+        """Calculates withdrawals during last calendar month
+
+        Returns:
+            int -- number of withdrawals during last calendar month
+        """
         count = 0
         i = len(self.transactions) - 1
-        while i >= 0 and (datetime.now() - self.transactions[i].datetime).months < 1:
+        while i >= 0 and (datetime.now() - self.transactions[i].datetime).days / 31 < 1:
             i -= 1
-            if self.transactions[i].amount < 0:
+            if self.transactions[i].total_amount < 0:
                 # Withdrawal, so increment counter
                 count += 1
         return count
 
     def audit(self):
+        """Audits account to ensure that balance attribute matches transaction log
+
+        Raises:
+            Exception: Balance doesn't match up with transaction
+        """
         try:
             assert self._balance == sum([transaction.total_amount for transaction in self.transactions if not transaction.undone])
         except AssertionError:
             raise Exception("Balance doesn't match up with transactions")
 
     def close(self):
-        self.closed = True
+        """Encapsulates closing account
+        """
+        self._closed = True
 
     def process_transaction(self, transaction):
+        """Applies transaction to balance
+
+        Arguments:
+            transaction {Transaction} -- Transaction to apply to account balance
+        """
         self._balance += transaction.total_amount
 
     def __repr__(self):
+        """String representation of account
+
+        Returns:
+            str -- String representation of account
+        """
         return "{} #{}".format(self.config, self.id)

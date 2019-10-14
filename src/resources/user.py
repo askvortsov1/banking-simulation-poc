@@ -30,7 +30,7 @@ class UserListApi(Resource):
         db.session.add(user)
         db.session.commit()
         return json_serialize(user)
-        
+
 
 class UserApi(Resource):
     """API Endpoint for working with User instances"""
@@ -51,9 +51,7 @@ class UserApi(Resource):
         """API Endpoint for updating user instance"""
         user = User.query.get_or_404(user_id)
         args = self.parser.parse_args()
-        for prop in ["fname", "lname", "credit_score"]:
-            if prop in args:
-                setattr(user, prop, args[prop])
+        user.update(args)
         db.session.commit()
         return json_serialize(user)
 
@@ -63,4 +61,3 @@ class UserApi(Resource):
         db.session.delete(user)
         db.session.commit()
         return json_serialize(user)
-        
